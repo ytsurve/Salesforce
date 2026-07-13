@@ -1,0 +1,7 @@
+interface:
+  display_name: "Salesforce Security Review"
+  short_description: "Salesforce security review checklist"
+  default_prompt: "Use $security-review to review Salesforce security risks."
+
+policy:
+  allow_implicit_invocation: true

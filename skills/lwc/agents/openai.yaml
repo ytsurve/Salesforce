@@ -1,0 +1,7 @@
+interface:
+  display_name: "Salesforce LWC"
+  short_description: "Lightning Web Component guidance"
+  default_prompt: "Use $lwc to build or review a Lightning Web Component."
+
+policy:
+  allow_implicit_invocation: true

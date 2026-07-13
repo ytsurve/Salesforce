@@ -1,0 +1,7 @@
+interface:
+  display_name: "Salesforce Apex"
+  short_description: "Apex coding, review, and testing guidance"
+  default_prompt: "Use $apex to implement or review Salesforce Apex safely."
+
+policy:
+  allow_implicit_invocation: true

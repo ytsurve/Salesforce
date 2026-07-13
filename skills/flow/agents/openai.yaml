@@ -1,0 +1,7 @@
+interface:
+  display_name: "Salesforce Flow"
+  short_description: "Flow design, review, and automation guidance"
+  default_prompt: "Use $flow to design or review Salesforce automation."
+
+policy:
+  allow_implicit_invocation: true
