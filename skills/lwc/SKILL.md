@@ -5,6 +5,8 @@ description: Lightning Web Component guidance. Use when creating, editing, revie
 
 # LWC
 
+For a UI incident, use `skills/salesforce-debugging/SKILL.md` to prove whether the cause is client state, server behavior, access, or automation before changing code. For any release, use `skills/salesforce-release-management/SKILL.md`.
+
 Reuse existing component patterns, styling conventions, Apex services, and data access choices.
 
 Prefer Lightning Data Service and wire adapters before imperative Apex when they fit.

@@ -5,6 +5,8 @@ description: Salesforce security review guidance. Use when reviewing CRUD, FLS, 
 
 # Security Review
 
+For an access or data-exposure incident, use `skills/salesforce-debugging/SKILL.md` to establish the affected user context and evidence before changing permissions or code. For any release, use `skills/salesforce-release-management/SKILL.md`.
+
 Treat security as a release gate.
 
 Check:
