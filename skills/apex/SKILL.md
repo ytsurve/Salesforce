@@ -5,6 +5,8 @@ description: Salesforce Apex implementation guidance. Use when creating, editing
 
 # Apex
 
+For an incident, use `skills/salesforce-debugging/SKILL.md` before proposing code changes. For any release, use `skills/salesforce-release-management/SKILL.md`.
+
 Search existing Apex before writing code. Reuse the repository's trigger, service, selector, domain, and utility patterns.
 
 Prefer configuration or Flow before Apex unless Apex is needed for scale, reuse, complex logic, transaction control, or integration.

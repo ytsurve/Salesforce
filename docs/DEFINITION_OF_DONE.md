@@ -1,13 +1,12 @@
 # Definition Of Done
 
-A task is done only when:
+A task is complete only when:
 
-- The requirement is addressed.
-- The solution follows repository patterns.
-- Salesforce governor limits are considered.
-- Security checks are handled.
-- Tests or verification steps were run or clearly explained.
-- Positive and negative scenarios were considered.
-- Risks and rollback notes are documented.
-- No unrelated files were changed.
-- The final response explains what changed and what remains.
+- The request and expected business outcome are confirmed.
+- Evidence supports the diagnosis and solution.
+- Approval was obtained before any state-changing action.
+- The smallest safe scope was used and unrelated files were untouched.
+- Relevant positive, negative, security, bulk, regression, and user-context scenarios were considered.
+- Production work has a recorded baseline, deployment result, monitoring check, and rollback artifact.
+- Data, integration, email, and asynchronous side effects were considered separately from metadata rollback.
+- The final record explains what happened, why, what changed, proof of success, remaining risk, and rollback status in plain language.

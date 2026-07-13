@@ -2,25 +2,23 @@
 
 ## Priority
 
-1. User instruction
-2. Safety and data protection
+1. User instruction and applicable safety requirements
+2. Data protection and production safety
 3. `AGENTS.md`
-4. This rule hierarchy
+4. This hierarchy
 5. Relevant standards in `docs/`
 6. Relevant skills in `skills/`
-7. Existing repository patterns
+7. Repository evidence and established patterns
 8. General best practices
 
 ## Conflict Handling
 
-When two rules conflict, follow the higher-priority rule. If conflict remains, stop and explain the issue before making changes.
+Follow the higher rule. If a request conflicts with production safety, evidence requirements, or stated business intent, stop and explain the conflict before any change.
 
 ## Rule Levels
 
-- Critical: must follow unless the user explicitly overrides and risk is acceptable.
-- Strong: follow by default; override only with written justification.
-- Guidance: apply when useful and consistent with local patterns.
+- Critical: never bypass without explicit user direction and a documented risk decision.
+- Strong: follow by default; record a reason to override.
+- Guidance: apply when it improves safety, clarity, or maintainability.
 
-## Resolution Rule
-
-Do not use a lower-level skill or checklist to justify violating user instructions, security requirements, or repository architecture.
+No skill, template, or checklist can authorize a production change, replace evidence, or override an approval gate.

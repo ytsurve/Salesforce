@@ -1,0 +1,4 @@
+interface:
+  display_name: "Salesforce Debugging"
+  short_description: "Diagnose Salesforce issues with evidence"
+  default_prompt: "Use $salesforce-debugging to investigate this Salesforce issue."

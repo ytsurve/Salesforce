@@ -1,0 +1,4 @@
+interface:
+  display_name: "Salesforce CLI Safety"
+  short_description: "Inspect orgs and metadata safely"
+  default_prompt: "Use $salesforce-cli to safely inspect the target Salesforce org."

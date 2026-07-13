@@ -1,0 +1,4 @@
+interface:
+  display_name: "Salesforce Release Safety"
+  short_description: "Plan validated deployments and rollback"
+  default_prompt: "Use $salesforce-release-management to plan this Salesforce deployment safely."

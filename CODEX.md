@@ -1,25 +1,14 @@
 # CODEX.md
 
-Use `AGENTS.md` as the source of truth for Codex behavior in this repository.
+`AGENTS.md` is the always-loaded operating contract for this repository.
 
-Keep this file intentionally short so it loads quickly and does not duplicate rules.
+Start each task with a plan and evidence. Do not edit or operate on a Salesforce org until the plan receives explicit approval.
 
-Required behavior:
+Load only the relevant material:
 
-- Read `AGENTS.md` first.
-- Load only the relevant docs, standards, skills, templates, and knowledge files for the current task.
-- Prefer evidence from the repository over assumptions.
-- Ask when Salesforce metadata or business intent cannot be verified.
-- Keep changes focused and reversible.
+- Debugging: `skills/salesforce-debugging/SKILL.md`
+- Org inspection or metadata retrieval: `skills/salesforce-cli/SKILL.md`
+- Deployment or rollback: `skills/salesforce-release-management/SKILL.md`
+- Apex, Flow, LWC, or security work: matching `skills/*/SKILL.md`
 
-For Salesforce implementation work, use the matching skill:
-
-- Apex: `skills/apex/SKILL.md`
-- Flow: `skills/flow/SKILL.md`
-- LWC: `skills/lwc/SKILL.md`
-- Security review: `skills/security-review/SKILL.md`
-
-For planning and completion formats, use:
-
-- `templates/plan.md`
-- `templates/change-log.md`
+Use `templates/` for approval plans, incident summaries, release records, and root-cause analyses. Record reusable, sanitized lessons in `knowledge/engineering-memory/`.

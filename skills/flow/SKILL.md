@@ -5,6 +5,8 @@ description: Salesforce Flow guidance. Use when creating, reviewing, debugging, 
 
 # Flow
 
+For a failing or unexpected Flow, use `skills/salesforce-debugging/SKILL.md` before changing metadata. For any release, use `skills/salesforce-release-management/SKILL.md`.
+
 Use Flow for straightforward automation, guided UI, approvals, routing, and simple data updates.
 
 Avoid Flow when logic needs complex transactions, heavy looping, advanced error handling, reusable algorithms, large data volume behavior, or integration orchestration that is safer in Apex.

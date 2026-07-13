@@ -1,0 +1,11 @@
+# Case-specific production artifacts: never commit secrets, customer data, or raw logs.
+org-snapshots/*
+!org-snapshots/README.md
+logs/*
+!logs/README.md
+*.log
+*.debug
+*.token
+*.key
+*.pem
+*.auth

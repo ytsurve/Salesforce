@@ -1,24 +1,9 @@
-# Change Log Standard
+# Change Record Standard
 
-## When To Record
+Record a change in `templates/production-change-log.md` whenever work modifies a production org, deployment artifact, automation, permission model, or user-facing behavior.
 
-Create or update a change log for completed implementation work, architecture decisions, production-risk changes, or important investigations.
+Include the request, evidence, root cause, affected components, exact change, approver, target org, deployment identifier, tests, outcome, monitoring, rollback artifact, and remaining risk.
 
-## Required Fields
+Write a plain-language summary first. Add technical detail below it; do not make a manager decode metadata names to understand the result.
 
-- Session or task ID
-- Timestamp
-- User request
-- Summary
-- Files changed
-- Metadata changed
-- Decisions made
-- Tests performed
-- Risks
-- Rollback steps
-- Known limitations
-- Next recommendations
-
-## Storage
-
-Use `knowledge/engineering-memory/` for durable lessons and decisions. Use `logs/` for task-level change records when the repository allows it.
+Never put passwords, tokens, customer data, personal data, full raw debug logs, or secrets in a change record.
