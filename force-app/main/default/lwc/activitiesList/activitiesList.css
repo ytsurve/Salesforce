@@ -1,0 +1,54 @@
+.activities-list-card {
+    background: white;
+}
+
+.activities-table-container {
+    min-height: 12rem;
+    padding: 0;
+}
+
+/* Search row and view toggle as flex children of one container, so both start at exactly the
+   same left edge. See the comment in activitiesList.html for why SLDS grid/gutter classes are
+   not used here. */
+.activities-toolbar {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+}
+
+.activities-search-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* An explicit width rather than flex-grow, so the box is a predictable length instead of one
+   that depends on how its ancestors happen to size themselves. max-width keeps it from
+   overflowing a narrow viewport. */
+.activities-search-input {
+    flex: 0 1 auto;
+    width: 22.5rem;
+    max-width: 100%;
+}
+
+/* Keeps the toggle at its natural width instead of stretching to the toolbar's full width. */
+.activities-view-toggle {
+    align-self: flex-start;
+}
+
+/* A DEFINITE height on the datatable ELEMENT ITSELF (not max-height, and not on a wrapper around
+   it) is what puts lightning-datatable into its own internal-scroll mode: the body scrolls inside
+   this box with the header frozen, and the inline-edit Save/Cancel bar docks at the bottom of the
+   visible area - the same behaviour as a standard Salesforce list view. A wrapper with
+   max-height + overflow does NOT do this: the datatable still lays itself out at its full
+   50-row height and only the wrapper scrolls, which is what pushed Save/Cancel below every row. */
+.activities-datatable {
+    display: block;
+    height: 60vh;
+    min-height: 20rem;
+}
+
+.activities-spinner-container {
+    min-height: 12rem;
+}

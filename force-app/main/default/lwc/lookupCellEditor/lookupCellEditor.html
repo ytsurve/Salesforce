@@ -1,0 +1,27 @@
+<template>
+    <div class="slds-p-around_x-small lookup-cell-editor">
+        <template lwc:if={showObjectSelector}>
+            <div class="slds-form-element slds-m-bottom_xx-small">
+                <div class="slds-form-element__control">
+                    <div class="slds-select_container">
+                        <select class="slds-select" onchange={handleObjectTypeChange}>
+                            <template for:each={selectOptions} for:item="opt">
+                                <option key={opt.value} value={opt.value} selected={opt.selected}>{opt.label}</option>
+                            </template>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </template>
+        <lightning-record-picker
+            label={recordPickerLabel}
+            variant="label-hidden"
+            object-api-name={selectedObjectApiName}
+            value={value}
+            onchange={handleRecordChange}
+        ></lightning-record-picker>
+        <template lwc:if={showError}>
+            <div class="slds-text-color_error slds-text-body_small slds-m-top_xx-small">Complete this field.</div>
+        </template>
+    </div>
+</template>

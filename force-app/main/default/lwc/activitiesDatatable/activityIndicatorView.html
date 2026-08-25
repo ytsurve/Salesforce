@@ -1,0 +1,16 @@
+<template>
+    <div
+        class="slds-truncate"
+        style="color:#0176d3;cursor:pointer;display:inline-flex;align-items:center;"
+        title={typeAttributes.label}
+        onclick={handleNavigate}
+        onkeydown={handleNavigateKeydown}
+        data-record-id={typeAttributes.recordId}
+        data-object-api-name={typeAttributes.objectApiName}
+        tabindex="0"
+        role="button"
+    >
+        <lightning-icon icon-name={typeAttributes.iconName} size="x-small" class="slds-m-right_x-small"></lightning-icon>
+        <span>{typeAttributes.label}</span>
+    </div>
+</template>

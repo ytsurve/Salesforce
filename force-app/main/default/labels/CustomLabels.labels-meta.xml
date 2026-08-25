@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomLabels xmlns="http://soap.sforce.com/2006/04/metadata">
+    <labels>
+        <fullName>Activities_List_Title</fullName>
+        <categories>Activities List</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Activities List component header title</shortDescription>
+        <value>Activities</value>
+    </labels>
+    <labels>
+        <fullName>Activities_New_Task</fullName>
+        <categories>Activities List</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>New Task button label</shortDescription>
+        <value>New Task</value>
+    </labels>
+    <labels>
+        <fullName>Activities_New_Event</fullName>
+        <categories>Activities List</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>New Event button label</shortDescription>
+        <value>New Event</value>
+    </labels>
+    <labels>
+        <fullName>Activities_Search_Placeholder</fullName>
+        <categories>Activities List</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Search box placeholder text</shortDescription>
+        <value>Search this list...</value>
+    </labels>
+    <labels>
+        <fullName>Activities_Filters</fullName>
+        <categories>Activities List</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Filters button label</shortDescription>
+        <value>Filters</value>
+    </labels>
+    <labels>
+        <fullName>Activities_View_All</fullName>
+        <categories>Activities List</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>All Activities view toggle label</shortDescription>
+        <value>All Activities</value>
+    </labels>
+    <labels>
+        <fullName>Activities_View_Backstory</fullName>
+        <categories>Activities List</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Backstory Activities view toggle label</shortDescription>
+        <value>Backstory Activities</value>
+    </labels>
+    <labels>
+        <fullName>Activities_Search_Button</fullName>
+        <categories>Activities List</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Explicit search button label</shortDescription>
+        <value>Search</value>
+    </labels>
+    <labels>
+        <fullName>Activities_Backstory_Integration_User_Id</fullName>
+        <categories>Activities List</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>User Id of the Backstory Integration User (Backstory Activities view filter).</shortDescription>
+        <value>005VU00000OQW51YAH</value>
+    </labels>
+    <labels>
+        <fullName>Activities_Empty_State</fullName>
+        <categories>Activities List</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Empty state message</shortDescription>
+        <value>No activities found. Try adjusting your search or filters.</value>
+    </labels>
+    <labels>
+        <fullName>Activities_Save_Success</fullName>
+        <categories>Activities List</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Toast message after a successful save</shortDescription>
+        <value>Activities updated successfully.</value>
+    </labels>
+    <labels>
+        <fullName>Activities_Save_Error</fullName>
+        <categories>Activities List</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Toast message after a failed save</shortDescription>
+        <value>We hit a problem saving your changes.</value>
+    </labels>
+    <labels>
+        <fullName>Activities_Delete_Confirm_Title</fullName>
+        <categories>Activities List</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Delete confirmation modal title</shortDescription>
+        <value>Delete Activity</value>
+    </labels>
+    <labels>
+        <fullName>Activities_Delete_Confirm_Message</fullName>
+        <categories>Activities List</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Delete confirmation modal message</shortDescription>
+        <value>Are you sure you want to delete this activity? This action cannot be undone.</value>
+    </labels>
+    <labels>
+        <fullName>Activities_Delete_Success</fullName>
+        <categories>Activities List</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Toast message after a successful delete</shortDescription>
+        <value>Activity deleted.</value>
+    </labels>
+    <labels>
+        <fullName>Activities_Load_Error</fullName>
+        <categories>Activities List</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Toast message when loading activities fails</shortDescription>
+        <value>We couldn't load activities. Please try again.</value>
+    </labels>
+    <labels>
+        <fullName>Activities_Filter_Apply</fullName>
+        <categories>Activities List</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Apply filters button</shortDescription>
+        <value>Apply</value>
+    </labels>
+    <labels>
+        <fullName>Activities_Filter_Cancel</fullName>
+        <categories>Activities List</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Cancel filters button</shortDescription>
+        <value>Cancel</value>
+    </labels>
+    <labels>
+        <fullName>Activities_Filter_Clear</fullName>
+        <categories>Activities List</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Clear filters button</shortDescription>
+        <value>Clear</value>
+    </labels>
+</CustomLabels>

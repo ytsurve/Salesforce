@@ -1,0 +1,24 @@
+<template>
+    <div class="slds-p-around_x-small">
+        <template lwc:if={typeAttributes.dateOnly}>
+            <lightning-input
+                type="date"
+                label={columnLabel}
+                variant="label-hidden"
+                value={editedValue}
+                required={required}
+                data-inputable="true"
+            ></lightning-input>
+        </template>
+        <template lwc:else>
+            <lightning-input
+                type="datetime"
+                label={columnLabel}
+                variant="label-hidden"
+                value={editedValue}
+                required={required}
+                data-inputable="true"
+            ></lightning-input>
+        </template>
+    </div>
+</template>

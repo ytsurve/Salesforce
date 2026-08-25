@@ -1,0 +1,138 @@
+<template>
+    <div class="slds-card activities-list-card">
+        <div class="slds-page-header slds-page-header_object-home">
+            <div class="slds-page-header__row">
+                <div class="slds-page-header__col-title">
+                    <div class="slds-media slds-media_center slds-no-space">
+                        <div class="slds-media__figure">
+                            <span class="slds-icon_container slds-icon-standard-task">
+                                <lightning-icon icon-name="standard:task" size="medium"></lightning-icon>
+                            </span>
+                        </div>
+                        <div class="slds-media__body">
+                            <h1 class="slds-page-header__title slds-truncate" title={labels.title}>{labels.title}</h1>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-page-header__col-actions">
+                    <div class="slds-button-group" role="group">
+                        <lightning-button-icon
+                            icon-name="utility:refresh"
+                            alternative-text="Refresh"
+                            title="Refresh"
+                            class="slds-m-right_x-small"
+                            onclick={handleRefresh}
+                        ></lightning-button-icon>
+                        <lightning-button
+                            label={labels.newTask}
+                            icon-name="utility:add"
+                            class="slds-m-right_x-small"
+                            onclick={handleNewTask}
+                        ></lightning-button>
+                        <lightning-button
+                            label={labels.newEvent}
+                            icon-name="utility:add"
+                            onclick={handleNewEvent}
+                        ></lightning-button>
+                    </div>
+                </div>
+            </div>
+            <!--
+              A plain block child of the page header, not a __row/__col-controls pair: those are
+              flex containers that sized themselves to their content, which is why the search box
+              would not widen. This div gets the header's full width, and both toolbar rows are
+              flex children of it so they share one left edge.
+            -->
+            <div class="slds-p-top_small activities-toolbar">
+                <div class="activities-search-row">
+                    <div class="activities-search-input">
+                        <lightning-input
+                            type="search"
+                            variant="label-hidden"
+                            label="Search"
+                            placeholder={labels.searchPlaceholder}
+                            value={searchTerm}
+                            onchange={handleSearchChange}
+                        ></lightning-input>
+                    </div>
+                    <lightning-button
+                        label={labels.searchButton}
+                        icon-name="utility:search"
+                        onclick={handleSearchNow}
+                    ></lightning-button>
+                </div>
+                <!--
+                  Native SLDS buttons rather than lightning-button: slds-button-group joins its
+                  children by targeting sibling .slds-button elements, and lightning-button renders
+                  its button inside its own shadow root - so those rules never matched and the two
+                  toggles rendered with a gap between them instead of as one group.
+                -->
+                <div class="slds-button-group activities-view-toggle" role="group">
+                    <button
+                        type="button"
+                        class={viewAllButtonClass}
+                        aria-pressed={viewAllPressed}
+                        onclick={handleViewAll}
+                    >{labels.viewAll}</button>
+                    <button
+                        type="button"
+                        class={viewBackstoryButtonClass}
+                        aria-pressed={viewBackstoryPressed}
+                        onclick={handleViewBackstory}
+                    >{labels.viewBackstory}</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="slds-card__body slds-card__body_inner activities-table-container">
+            <template lwc:if={isLoading}>
+                <div class="slds-is-relative activities-spinner-container">
+                    <lightning-spinner alternative-text="Loading activities" size="medium"></lightning-spinner>
+                </div>
+            </template>
+            <template lwc:elseif={showEmptyState}>
+                <div class="slds-illustration slds-illustration_small slds-p-around_large slds-text-align_center">
+                    <lightning-icon icon-name="utility:open_folder" size="large" class="slds-m-bottom_small"></lightning-icon>
+                    <p class="slds-text-body_regular">{labels.emptyState}</p>
+                </div>
+            </template>
+            <template lwc:else>
+                <c-activities-datatable
+                    class="activities-datatable"
+                    key-field="recordId"
+                    columns={columns}
+                    data={rows}
+                    draft-values={draftValues}
+                    show-row-number-column
+                    row-number-offset={rowNumberOffset}
+                    sorted-by={sortedByFieldName}
+                    sorted-direction={sortDirection}
+                    onsort={handleSort}
+                    oncellchange={handleCellChange}
+                    onsave={handleSave}
+                    oncancel={handleCancelEdit}
+                    onrowaction={handleRowAction}
+                    onactivitynavigate={handleActivityNavigate}
+                ></c-activities-datatable>
+                <div class="slds-grid slds-grid_align-spread slds-p-around_small activities-pagination">
+                    <div class="slds-text-body_small slds-text-color_weak">{pageRangeLabel}</div>
+                    <div class="slds-button-group" role="group">
+                        <lightning-button
+                            label="Previous"
+                            icon-name="utility:chevronleft"
+                            disabled={isPreviousDisabled}
+                            onclick={handlePreviousPage}
+                        ></lightning-button>
+                        <lightning-button
+                            label="Next"
+                            icon-name="utility:chevronright"
+                            icon-position="right"
+                            disabled={isNextDisabled}
+                            onclick={handleNextPage}
+                        ></lightning-button>
+                    </div>
+                </div>
+            </template>
+        </div>
+    </div>
+</template>

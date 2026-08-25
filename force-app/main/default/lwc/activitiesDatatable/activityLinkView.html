@@ -1,0 +1,18 @@
+<template>
+    <!--
+      A real href, not just a click handler: it makes this an actual hyperlink (so
+      middle-click/Cmd-click open in a new tab, and the status bar shows the target), and it means
+      the cell still navigates even if the click handler is unavailable. handleNavigate calls
+      preventDefault, so a plain click keeps the faster in-app navigation and the href is only the
+      fallback.
+    -->
+    <a
+        class="slds-truncate"
+        style="color:#0176d3;text-decoration:none;"
+        href={typeAttributes.url}
+        title={typeAttributes.displayName}
+        onclick={handleNavigate}
+        data-record-id={typeAttributes.recordId}
+        data-object-api-name={typeAttributes.objectApiName}
+    >{typeAttributes.displayName}</a>
+</template>

@@ -1,0 +1,11 @@
+{
+  "packageDirectories": [
+    {
+      "path": "force-app",
+      "default": true
+    }
+  ],
+  "name": "salesforce-claude-activities-list",
+  "namespace": "",
+  "sourceApiVersion": "60.0"
+}
