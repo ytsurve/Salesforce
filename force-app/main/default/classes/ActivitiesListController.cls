@@ -173,9 +173,7 @@ public with sharing class ActivitiesListController {
             FilterPlan plan = String.isNotBlank(request.searchTerm)
                 ? buildSearchPlan(request.searchTerm)
                 : noFilterPlan();
-            if ('backstory'.equalsIgnoreCase(request.view)) {
-                plan = applyBackstoryFilter(plan);
-            }
+            plan = applyViewFilter(plan, request.view);
 
             List<ActivityRow> merged = new List<ActivityRow>();
             if (Schema.SObjectType.Task.isAccessible() && plan.taskClause != FilterPlan.ALWAYS_FALSE) {
@@ -208,16 +206,50 @@ public with sharing class ActivitiesListController {
         }
     }
 
-    // ANDs a CreatedById condition onto whatever clause search already produced - this is a fixed
-    // preset view, not a general-purpose filter.
-    private static FilterPlan applyBackstoryFilter(FilterPlan plan) {
+    /**
+     * ANDs the selected view's fixed predicates onto whatever clause search already produced.
+     * These are preset views, not a general-purpose filter:
+     *
+     *   all         - everything the running user can see.
+     *   backstory   - created by the Backstory Integration User, whoever it is assigned to.
+     *   my          - created by the running user.
+     *   myBackstory - created by the Backstory Integration User AND assigned to the running user.
+     *
+     * Note the deliberate asymmetry between "my" (created by me) and "my backstory" (created by
+     * the integration, assigned to me): an integration-created activity is never created by the
+     * person who owns it, so keying the Backstory view off CreatedById alone would make "mine"
+     * mean nothing. Ownership is what makes it theirs.
+     */
+    private static FilterPlan applyViewFilter(FilterPlan plan, String view) {
+        Boolean isBackstory = 'backstory'.equalsIgnoreCase(view);
+        Boolean isMy = 'my'.equalsIgnoreCase(view);
+        Boolean isMyBackstory = 'myBackstory'.equalsIgnoreCase(view);
+
+        List<String> predicates = new List<String>();
+        if (isBackstory || isMyBackstory) {
+            predicates.add('CreatedById = :backstoryUserId');
+            plan.binds.put('backstoryUserId', BACKSTORY_INTEGRATION_USER_ID);
+        }
+        if (isMy) {
+            predicates.add('CreatedById = :currentUserId');
+        }
+        if (isMyBackstory) {
+            predicates.add('OwnerId = :currentUserId');
+        }
+        if (isMy || isMyBackstory) {
+            plan.binds.put('currentUserId', UserInfo.getUserId());
+        }
+        if (predicates.isEmpty()) {
+            return plan;
+        }
+
+        String viewClause = String.join(predicates, ' AND ');
         if (plan.taskClause != FilterPlan.ALWAYS_FALSE) {
-            plan.taskClause = '(' + plan.taskClause + ') AND CreatedById = :backstoryUserId';
+            plan.taskClause = '(' + plan.taskClause + ') AND ' + viewClause;
         }
         if (plan.eventClause != FilterPlan.ALWAYS_FALSE) {
-            plan.eventClause = '(' + plan.eventClause + ') AND CreatedById = :backstoryUserId';
+            plan.eventClause = '(' + plan.eventClause + ') AND ' + viewClause;
         }
-        plan.binds.put('backstoryUserId', BACKSTORY_INTEGRATION_USER_ID);
         return plan;
     }
 

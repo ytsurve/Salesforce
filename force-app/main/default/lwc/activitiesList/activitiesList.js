@@ -14,6 +14,9 @@ import searchPlaceholderLabel from '@salesforce/label/c.Activities_Search_Placeh
 import searchButtonLabel from '@salesforce/label/c.Activities_Search_Button';
 import viewAllLabel from '@salesforce/label/c.Activities_View_All';
 import viewBackstoryLabel from '@salesforce/label/c.Activities_View_Backstory';
+import viewMyLabel from '@salesforce/label/c.Activities_View_My';
+import viewMyBackstoryLabel from '@salesforce/label/c.Activities_View_My_Backstory';
+import viewPickerLabel from '@salesforce/label/c.Activities_View_Picker_Label';
 import emptyStateLabel from '@salesforce/label/c.Activities_Empty_State';
 import saveSuccessLabel from '@salesforce/label/c.Activities_Save_Success';
 import saveErrorLabel from '@salesforce/label/c.Activities_Save_Error';
@@ -81,6 +84,16 @@ const EDITABLE_FLAG_BY_FIELD = {
     assignedToId: 'assignedToEditable'
 };
 
+// The preset views, in the order they appear in the picker. Values must match the view names
+// ActivitiesListController.applyViewFilter recognises. "My Activities" means created by the
+// running user; "My Backstory Activities" means created by the integration and assigned to them.
+const VIEW_OPTIONS = [
+    { label: viewAllLabel, value: 'all' },
+    { label: viewMyLabel, value: 'my' },
+    { label: viewBackstoryLabel, value: 'backstory' },
+    { label: viewMyBackstoryLabel, value: 'myBackstory' }
+];
+
 // Lookup columns edit an Id field but DISPLAY a name field (and link to a record), so the
 // datatable cannot refresh the visible text by itself when a draft is committed - each edited Id
 // maps here to the row properties the column actually renders, which handleCellChange repaints
@@ -113,8 +126,7 @@ export default class ActivitiesList extends NavigationMixin(LightningElement) {
         newEvent: newEventLabel,
         searchPlaceholder: searchPlaceholderLabel,
         searchButton: searchButtonLabel,
-        viewAll: viewAllLabel,
-        viewBackstory: viewBackstoryLabel,
+        viewPicker: viewPickerLabel,
         emptyState: emptyStateLabel,
         saveSuccess: saveSuccessLabel,
         saveError: saveErrorLabel,
@@ -135,7 +147,10 @@ export default class ActivitiesList extends NavigationMixin(LightningElement) {
     pristineRows = [];
 
     searchTerm = '';
-    activeView = 'all';
+    // Opens on the user's own activities rather than the whole org's. Note this is a UI default
+    // only: a request that omits the view entirely still means "everything" server-side, so the
+    // Apex stays predictable for any other caller rather than applying an implicit filter.
+    activeView = 'my';
     sortField = 'activityDate';
     // Most-recent-first by default - matches this being an activity feed, not an alphabetical
     // record list.
@@ -254,24 +269,8 @@ export default class ActivitiesList extends NavigationMixin(LightningElement) {
         return !this.isLoading && this.rows.length === 0;
     }
 
-    get isViewAll() {
-        return this.activeView !== 'backstory';
-    }
-
-    get viewAllButtonClass() {
-        return this.isViewAll ? 'slds-button slds-button_brand' : 'slds-button slds-button_neutral';
-    }
-
-    get viewBackstoryButtonClass() {
-        return this.isViewAll ? 'slds-button slds-button_neutral' : 'slds-button slds-button_brand';
-    }
-
-    get viewAllPressed() {
-        return String(this.isViewAll);
-    }
-
-    get viewBackstoryPressed() {
-        return String(!this.isViewAll);
+    get viewOptions() {
+        return VIEW_OPTIONS;
     }
 
     get isFirstPage() {
@@ -404,19 +403,15 @@ export default class ActivitiesList extends NavigationMixin(LightningElement) {
         this.loadActivities(true);
     }
 
-    handleViewAll() {
-        if (this.activeView === 'all') {
+    handleViewChange(event) {
+        const selected = event.detail.value;
+        if (!selected || selected === this.activeView) {
             return;
         }
-        this.activeView = 'all';
-        this.loadActivities(true);
-    }
-
-    handleViewBackstory() {
-        if (this.activeView === 'backstory') {
-            return;
-        }
-        this.activeView = 'backstory';
+        this.activeView = selected;
+        // Switching view invalidates any in-flight edits: the rows they belong to may not be in
+        // the new view at all.
+        this.draftValues = [];
         this.loadActivities(true);
     }
 

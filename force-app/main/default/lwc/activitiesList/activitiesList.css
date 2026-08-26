@@ -21,6 +21,16 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+/* Fixed width so the picker doesn't resize as the selected view's name changes length - a control
+   that shifts the search box sideways when you pick a different view reads as a glitch. Wide
+   enough for the longest option ("My Backstory Activities"). */
+.activities-view-picker {
+    flex: 0 0 auto;
+    width: 15rem;
+    max-width: 100%;
 }
 
 /* An explicit width rather than flex-grow, so the box is a predictable length instead of one
@@ -32,10 +42,6 @@
     max-width: 100%;
 }
 
-/* Keeps the toggle at its natural width instead of stretching to the toolbar's full width. */
-.activities-view-toggle {
-    align-self: flex-start;
-}
 
 /* A DEFINITE height on the datatable ELEMENT ITSELF (not max-height, and not on a wrapper around
    it) is what puts lightning-datatable into its own internal-scroll mode: the body scrolls inside

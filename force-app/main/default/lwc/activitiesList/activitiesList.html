@@ -45,6 +45,15 @@
             -->
             <div class="slds-p-top_small activities-toolbar">
                 <div class="activities-search-row">
+                    <div class="activities-view-picker">
+                        <lightning-combobox
+                            variant="label-hidden"
+                            label={labels.viewPicker}
+                            value={activeView}
+                            options={viewOptions}
+                            onchange={handleViewChange}
+                        ></lightning-combobox>
+                    </div>
                     <div class="activities-search-input">
                         <lightning-input
                             type="search"
@@ -60,26 +69,6 @@
                         icon-name="utility:search"
                         onclick={handleSearchNow}
                     ></lightning-button>
-                </div>
-                <!--
-                  Native SLDS buttons rather than lightning-button: slds-button-group joins its
-                  children by targeting sibling .slds-button elements, and lightning-button renders
-                  its button inside its own shadow root - so those rules never matched and the two
-                  toggles rendered with a gap between them instead of as one group.
-                -->
-                <div class="slds-button-group activities-view-toggle" role="group">
-                    <button
-                        type="button"
-                        class={viewAllButtonClass}
-                        aria-pressed={viewAllPressed}
-                        onclick={handleViewAll}
-                    >{labels.viewAll}</button>
-                    <button
-                        type="button"
-                        class={viewBackstoryButtonClass}
-                        aria-pressed={viewBackstoryPressed}
-                        onclick={handleViewBackstory}
-                    >{labels.viewBackstory}</button>
                 </div>
             </div>
         </div>

@@ -53,8 +53,32 @@
         <categories>Activities List</categories>
         <language>en_US</language>
         <protected>false</protected>
-        <shortDescription>Backstory Activities view toggle label</shortDescription>
+        <shortDescription>Backstory Activities view option label</shortDescription>
         <value>Backstory Activities</value>
+    </labels>
+    <labels>
+        <fullName>Activities_View_My</fullName>
+        <categories>Activities List</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>My Activities view option label</shortDescription>
+        <value>My Activities</value>
+    </labels>
+    <labels>
+        <fullName>Activities_View_My_Backstory</fullName>
+        <categories>Activities List</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>My Backstory Activities view option label</shortDescription>
+        <value>My Backstory Activities</value>
+    </labels>
+    <labels>
+        <fullName>Activities_View_Picker_Label</fullName>
+        <categories>Activities List</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Accessible label for the list view picker</shortDescription>
+        <value>List View</value>
     </labels>
     <labels>
         <fullName>Activities_Search_Button</fullName>

@@ -189,22 +189,60 @@ private class ActivitiesListControllerTest {
         System.assertEquals('[Gong] Samba x WPP | Lunch', result.rows[0].subject);
     }
 
+    private static ActivitiesListController.ActivitiesResult view(String viewName) {
+        ActivitiesListController.QueryRequest req = new ActivitiesListController.QueryRequest();
+        req.view = viewName;
+        req.pageOffset = 0;
+        req.pageSize = 50;
+        return ActivitiesListController.getActivities(JSON.serialize(req));
+    }
+
     @IsTest
     static void testBackstoryViewExcludesRecordsNotCreatedByThatUser() {
         // None of the @TestSetup records were created by the Backstory Integration User (its Id
         // is a fixed Custom Label value, not the running test context user) - so the Backstory
         // view should legitimately come back empty, the same way it does in an org/sandbox where
         // that user has no activity yet.
-        ActivitiesListController.QueryRequest req = new ActivitiesListController.QueryRequest();
-        req.view = 'backstory';
-        req.pageOffset = 0;
-        req.pageSize = 50;
-
         Test.startTest();
-        ActivitiesListController.ActivitiesResult result = ActivitiesListController.getActivities(JSON.serialize(req));
+        ActivitiesListController.ActivitiesResult result = view('backstory');
         Test.stopTest();
 
         System.assertEquals(0, result.rows.size(), 'No setup records were created by the Backstory Integration User');
+    }
+
+    @IsTest
+    static void testMyViewReturnsRecordsCreatedByRunningUser() {
+        // @TestSetup records are created by the test-running user, and owned by a different
+        // (test-created) user - so "My Activities" (created by me) must return all of them even
+        // though none are assigned to me.
+        Test.startTest();
+        ActivitiesListController.ActivitiesResult result = view('my');
+        Test.stopTest();
+
+        System.assertEquals(8, result.rows.size(), 'All 8 setup activities were created by the running user');
+        for (ActivitiesListController.ActivityRow row : result.rows) {
+            System.assertNotEquals(UserInfo.getUserId(), row.assignedToId, 'Setup records are owned by another user');
+        }
+    }
+
+    @IsTest
+    static void testMyBackstoryViewRequiresBothCreatedByAndOwnership() {
+        // Created by the running user, not the integration, so this view excludes them regardless
+        // of ownership - it is the AND of "created by Backstory" and "assigned to me".
+        Test.startTest();
+        ActivitiesListController.ActivitiesResult result = view('myBackstory');
+        Test.stopTest();
+
+        System.assertEquals(0, result.rows.size(), 'Nothing was created by the integration user');
+    }
+
+    @IsTest
+    static void testUnrecognisedViewFallsBackToEverything() {
+        Test.startTest();
+        ActivitiesListController.ActivitiesResult result = view('notAView');
+        Test.stopTest();
+
+        System.assertEquals(8, result.rows.size(), 'An unknown view must not silently hide rows');
     }
 
     @IsTest
