@@ -211,29 +211,42 @@ private class ActivitiesListControllerTest {
     }
 
     @IsTest
-    static void testMyViewReturnsRecordsCreatedByRunningUser() {
-        // @TestSetup records are created by the test-running user, and owned by a different
-        // (test-created) user - so "My Activities" (created by me) must return all of them even
-        // though none are assigned to me.
+    static void testMyViewReturnsRecordsAssignedToRunningUser() {
+        // Every @TestSetup record is CREATED by the test-running user but OWNED by a different
+        // (test-created) user, so "My Activities" must exclude all 8 of them - proving the view
+        // keys off ownership, not creator. This task defaults its owner to the running user.
+        // WhoId is required by an org validation rule ("You must select an Account, Opportunity,
+        // Contact, or Lead to assign this Activity to"), not by the feature under test.
+        Contact con = [SELECT Id FROM Contact WHERE LastName = 'FilterTestContact' LIMIT 1];
+        Task mine = new Task(Subject = 'Assigned To Me', ActivityDate = Date.today(), WhoId = con.Id);
+        insert mine;
+
         Test.startTest();
         ActivitiesListController.ActivitiesResult result = view('my');
         Test.stopTest();
 
-        System.assertEquals(8, result.rows.size(), 'All 8 setup activities were created by the running user');
-        for (ActivitiesListController.ActivityRow row : result.rows) {
-            System.assertNotEquals(UserInfo.getUserId(), row.assignedToId, 'Setup records are owned by another user');
-        }
+        System.assertEquals(1, result.rows.size(), 'Only the activity owned by the running user is mine');
+        System.assertEquals(mine.Id, result.rows[0].recordId);
+        System.assertEquals(UserInfo.getUserId(), result.rows[0].assignedToId);
     }
 
     @IsTest
     static void testMyBackstoryViewRequiresBothCreatedByAndOwnership() {
-        // Created by the running user, not the integration, so this view excludes them regardless
-        // of ownership - it is the AND of "created by Backstory" and "assigned to me".
+        // This view is the AND of "created by Backstory" and "assigned to me". A task owned by the
+        // running user satisfies half of it, and must still be excluded because the integration
+        // user did not create it.
+        Contact con = [SELECT Id FROM Contact WHERE LastName = 'FilterTestContact' LIMIT 1];
+        insert new Task(
+            Subject = 'Assigned To Me But Not From Backstory',
+            ActivityDate = Date.today(),
+            WhoId = con.Id
+        );
+
         Test.startTest();
         ActivitiesListController.ActivitiesResult result = view('myBackstory');
         Test.stopTest();
 
-        System.assertEquals(0, result.rows.size(), 'Nothing was created by the integration user');
+        System.assertEquals(0, result.rows.size(), 'Ownership alone is not enough for this view');
     }
 
     @IsTest

@@ -212,13 +212,12 @@ public with sharing class ActivitiesListController {
      *
      *   all         - everything the running user can see.
      *   backstory   - created by the Backstory Integration User, whoever it is assigned to.
-     *   my          - created by the running user.
+     *   my          - assigned to the running user.
      *   myBackstory - created by the Backstory Integration User AND assigned to the running user.
      *
-     * Note the deliberate asymmetry between "my" (created by me) and "my backstory" (created by
-     * the integration, assigned to me): an integration-created activity is never created by the
-     * person who owns it, so keying the Backstory view off CreatedById alone would make "mine"
-     * mean nothing. Ownership is what makes it theirs.
+     * "Mine" means assigned to (OwnerId), not created by, in both of the "my" views: an
+     * integration-created activity is never created by the person who works it, so ownership is
+     * what makes a record theirs.
      */
     private static FilterPlan applyViewFilter(FilterPlan plan, String view) {
         Boolean isBackstory = 'backstory'.equalsIgnoreCase(view);
@@ -230,13 +229,8 @@ public with sharing class ActivitiesListController {
             predicates.add('CreatedById = :backstoryUserId');
             plan.binds.put('backstoryUserId', BACKSTORY_INTEGRATION_USER_ID);
         }
-        if (isMy) {
-            predicates.add('CreatedById = :currentUserId');
-        }
-        if (isMyBackstory) {
-            predicates.add('OwnerId = :currentUserId');
-        }
         if (isMy || isMyBackstory) {
+            predicates.add('OwnerId = :currentUserId');
             plan.binds.put('currentUserId', UserInfo.getUserId());
         }
         if (predicates.isEmpty()) {
