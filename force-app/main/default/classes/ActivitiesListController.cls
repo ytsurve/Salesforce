@@ -28,11 +28,11 @@ public with sharing class ActivitiesListController {
         'Contact' => 'Name'
     };
 
-    // Backed by a Custom Label (not hardcoded here) so the Id can be corrected per-org without a
-    // code deploy - this user is a Service Account that may not exist in every sandbox (e.g. it's
-    // absent from this org's fullcopy), in which case the Backstory view legitimately returns zero
-    // rows rather than erroring.
-    private static final Id BACKSTORY_INTEGRATION_USER_ID = Id.valueOf(Label.Activities_Backstory_Integration_User_Id);
+    // The People.ai managed-package checkbox that marks an activity as integration-created. This
+    // is the org's own record of provenance, so the Backstory views key off it rather than off a
+    // specific integration user's Id - which would break the moment that user were replaced,
+    // renamed, or differed between sandbox and production.
+    private static final String PEOPLEAI_CREATED_FIELD = 'peopleai__Created_by_PeopleAI__c';
 
     // ------------------------------------------------------------------------------------
     // Wrapper types
@@ -211,9 +211,9 @@ public with sharing class ActivitiesListController {
      * These are preset views, not a general-purpose filter:
      *
      *   all         - everything the running user can see.
-     *   backstory   - created by the Backstory Integration User, whoever it is assigned to.
+     *   backstory   - flagged as People.ai-created, whoever it is assigned to.
      *   my          - assigned to the running user.
-     *   myBackstory - created by the Backstory Integration User AND assigned to the running user.
+     *   myBackstory - flagged as People.ai-created AND assigned to the running user.
      *
      * "Mine" means assigned to (OwnerId), not created by, in both of the "my" views: an
      * integration-created activity is never created by the person who works it, so ownership is
@@ -223,28 +223,49 @@ public with sharing class ActivitiesListController {
         Boolean isBackstory = 'backstory'.equalsIgnoreCase(view);
         Boolean isMy = 'my'.equalsIgnoreCase(view);
         Boolean isMyBackstory = 'myBackstory'.equalsIgnoreCase(view);
-
-        List<String> predicates = new List<String>();
-        if (isBackstory || isMyBackstory) {
-            predicates.add('CreatedById = :backstoryUserId');
-            plan.binds.put('backstoryUserId', BACKSTORY_INTEGRATION_USER_ID);
-        }
-        if (isMy || isMyBackstory) {
-            predicates.add('OwnerId = :currentUserId');
-            plan.binds.put('currentUserId', UserInfo.getUserId());
-        }
-        if (predicates.isEmpty()) {
+        if (!isBackstory && !isMy && !isMyBackstory) {
             return plan;
         }
 
-        String viewClause = String.join(predicates, ' AND ');
-        if (plan.taskClause != FilterPlan.ALWAYS_FALSE) {
-            plan.taskClause = '(' + plan.taskClause + ') AND ' + viewClause;
+        List<String> sharedPredicates = new List<String>();
+        if (isMy || isMyBackstory) {
+            sharedPredicates.add('OwnerId = :currentUserId');
+            plan.binds.put('currentUserId', UserInfo.getUserId());
         }
-        if (plan.eventClause != FilterPlan.ALWAYS_FALSE) {
-            plan.eventClause = '(' + plan.eventClause + ') AND ' + viewClause;
-        }
+        Boolean requiresPeopleAiFlag = isBackstory || isMyBackstory;
+
+        plan.taskClause = narrowToView(plan.taskClause, sharedPredicates, requiresPeopleAiFlag, Task.SObjectType);
+        plan.eventClause = narrowToView(plan.eventClause, sharedPredicates, requiresPeopleAiFlag, Event.SObjectType);
         return plan;
+    }
+
+    private static String narrowToView(
+        String clause, List<String> sharedPredicates, Boolean requiresPeopleAiFlag, Schema.SObjectType objectType
+    ) {
+        if (clause == FilterPlan.ALWAYS_FALSE) {
+            return clause;
+        }
+        List<String> predicates = new List<String>(sharedPredicates);
+        if (requiresPeopleAiFlag) {
+            // Checked per object rather than assumed: the field comes from a managed package, so it
+            // may be absent (package not installed) or unreadable for this user. Without it there
+            // is no way to tell which activities the integration created, so this view yields
+            // nothing for that object rather than silently falling back to showing everything and
+            // presenting it as integration-created.
+            if (!hasPeopleAiFlagField(objectType)) {
+                return FilterPlan.ALWAYS_FALSE;
+            }
+            predicates.add(PEOPLEAI_CREATED_FIELD + ' = true');
+        }
+        if (predicates.isEmpty()) {
+            return clause;
+        }
+        return '(' + clause + ') AND ' + String.join(predicates, ' AND ');
+    }
+
+    private static Boolean hasPeopleAiFlagField(Schema.SObjectType objectType) {
+        Schema.SObjectField field = objectType.getDescribe().fields.getMap().get(PEOPLEAI_CREATED_FIELD);
+        return field != null && field.getDescribe().isAccessible();
     }
 
     private static Integer normalizePageSize(Integer requested) {

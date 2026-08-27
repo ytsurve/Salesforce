@@ -197,17 +197,37 @@ private class ActivitiesListControllerTest {
         return ActivitiesListController.getActivities(JSON.serialize(req));
     }
 
+    // WhoId is set on every task these tests insert to satisfy an org validation rule ("You must
+    // select an Account, Opportunity, Contact, or Lead to assign this Activity to"), not because
+    // the view logic needs it.
+    private static Task newTask(String subject, Boolean createdByPeopleAi, Id ownerId) {
+        Contact con = [SELECT Id FROM Contact WHERE LastName = 'FilterTestContact' LIMIT 1];
+        Task t = new Task(
+            Subject = subject,
+            ActivityDate = Date.today(),
+            WhoId = con.Id,
+            peopleai__Created_by_PeopleAI__c = createdByPeopleAi
+        );
+        if (ownerId != null) {
+            t.OwnerId = ownerId;
+        }
+        return t;
+    }
+
     @IsTest
-    static void testBackstoryViewExcludesRecordsNotCreatedByThatUser() {
-        // None of the @TestSetup records were created by the Backstory Integration User (its Id
-        // is a fixed Custom Label value, not the running test context user) - so the Backstory
-        // view should legitimately come back empty, the same way it does in an org/sandbox where
-        // that user has no activity yet.
+    static void testBackstoryViewReturnsOnlyPeopleAiFlaggedActivities() {
+        // The flag, not the creating user, is what defines this view - so an activity flagged as
+        // People.ai-created belongs here even though the test user created it, and the unflagged
+        // setup records do not, regardless of who owns them.
+        Task flagged = newTask('From People.ai', true, null);
+        insert flagged;
+
         Test.startTest();
         ActivitiesListController.ActivitiesResult result = view('backstory');
         Test.stopTest();
 
-        System.assertEquals(0, result.rows.size(), 'No setup records were created by the Backstory Integration User');
+        System.assertEquals(1, result.rows.size(), 'Only the flagged activity is integration-created');
+        System.assertEquals(flagged.Id, result.rows[0].recordId);
     }
 
     @IsTest
@@ -215,10 +235,7 @@ private class ActivitiesListControllerTest {
         // Every @TestSetup record is CREATED by the test-running user but OWNED by a different
         // (test-created) user, so "My Activities" must exclude all 8 of them - proving the view
         // keys off ownership, not creator. This task defaults its owner to the running user.
-        // WhoId is required by an org validation rule ("You must select an Account, Opportunity,
-        // Contact, or Lead to assign this Activity to"), not by the feature under test.
-        Contact con = [SELECT Id FROM Contact WHERE LastName = 'FilterTestContact' LIMIT 1];
-        Task mine = new Task(Subject = 'Assigned To Me', ActivityDate = Date.today(), WhoId = con.Id);
+        Task mine = newTask('Assigned To Me', false, null);
         insert mine;
 
         Test.startTest();
@@ -231,22 +248,24 @@ private class ActivitiesListControllerTest {
     }
 
     @IsTest
-    static void testMyBackstoryViewRequiresBothCreatedByAndOwnership() {
-        // This view is the AND of "created by Backstory" and "assigned to me". A task owned by the
-        // running user satisfies half of it, and must still be excluded because the integration
-        // user did not create it.
-        Contact con = [SELECT Id FROM Contact WHERE LastName = 'FilterTestContact' LIMIT 1];
-        insert new Task(
-            Subject = 'Assigned To Me But Not From Backstory',
-            ActivityDate = Date.today(),
-            WhoId = con.Id
-        );
+    static void testMyBackstoryViewRequiresBothTheFlagAndOwnership() {
+        // This view is the AND of "flagged as People.ai-created" and "assigned to me". Each of the
+        // three decoys below satisfies at most one half of that and must be excluded.
+        User otherOwner = [SELECT Id FROM User WHERE LastName = 'TestOwner' LIMIT 1];
+        Task expected = newTask('Flagged And Mine', true, null);
+        insert new List<Task>{
+            expected,
+            newTask('Flagged But Someone Elses', true, otherOwner.Id),
+            newTask('Mine But Not Flagged', false, null),
+            newTask('Neither', false, otherOwner.Id)
+        };
 
         Test.startTest();
         ActivitiesListController.ActivitiesResult result = view('myBackstory');
         Test.stopTest();
 
-        System.assertEquals(0, result.rows.size(), 'Ownership alone is not enough for this view');
+        System.assertEquals(1, result.rows.size(), 'Only the flagged activity owned by me qualifies');
+        System.assertEquals(expected.Id, result.rows[0].recordId);
     }
 
     @IsTest

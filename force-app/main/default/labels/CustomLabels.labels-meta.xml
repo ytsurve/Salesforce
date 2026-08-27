@@ -89,14 +89,6 @@
         <value>Search</value>
     </labels>
     <labels>
-        <fullName>Activities_Backstory_Integration_User_Id</fullName>
-        <categories>Activities List</categories>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>User Id of the Backstory Integration User (Backstory Activities view filter).</shortDescription>
-        <value>005VU00000OQW51YAH</value>
-    </labels>
-    <labels>
         <fullName>Activities_Empty_State</fullName>
         <categories>Activities List</categories>
         <language>en_US</language>
