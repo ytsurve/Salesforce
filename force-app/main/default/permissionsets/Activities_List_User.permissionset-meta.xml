@@ -1,10 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
     <label>Activities List User</label>
-    <description>Apex class access for the Activities List LWC only. Grants no object, field, or record access - users still need their existing Task/Event CRUD, FLS, and sharing access.</description>
+    <description>Apex class access and Activities tab visibility for the Activities List LWC. Grants no object, field, or record access - users still need their existing Task/Event CRUD, FLS, and sharing access.</description>
     <hasActivationRequired>false</hasActivationRequired>
     <classAccesses>
         <apexClass>ActivitiesListController</apexClass>
         <enabled>true</enabled>
     </classAccesses>
+    <!--
+      Without this the tab is invisible to everyone, System Administrators included: a newly
+      deployed CustomTab defaults to hidden on every profile, and adding the App Page to an app's
+      navigation does not grant visibility - that only decides where the tab appears IF the user
+      can see it at all. Granting it here rather than profile by profile keeps "can reach the
+      Activities list" a single assignment.
+
+      Note the Metadata API strips XML comments and reorders these elements, so a retrieve will
+      overwrite this block; restore it rather than losing the reasoning.
+    -->
+    <tabSettings>
+        <tab>Activities</tab>
+        <visibility>Visible</visibility>
+    </tabSettings>
 </PermissionSet>
