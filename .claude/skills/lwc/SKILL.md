@@ -3,7 +3,23 @@ name: lwc
 description: Lightning Web Component guidance. Use when creating, editing, reviewing, debugging, or testing Salesforce LWC UI, Apex-backed components, wire adapters, LDS, accessibility, performance, or client-side state.
 ---
 
-Canonical workflow: read [`skills/lwc/SKILL.md`](../../skills/lwc/SKILL.md) in full before acting.
+# LWC
 
-This file exists only so Claude Code discovers the skill under `.claude/skills/`. Do not duplicate
-workflow content here — edit the canonical file instead (`docs/SKILL_EVOLUTION_STANDARD.md`).
+For a UI incident, use `.claude/skills/salesforce-debugging/SKILL.md` to prove whether the cause is client state, server behavior, access, or automation before changing code. For any release, use `.claude/skills/salesforce-release-management/SKILL.md`.
+
+Reuse existing component patterns, styling conventions, Apex services, and data access choices.
+
+Prefer Lightning Data Service and wire adapters before imperative Apex when they fit.
+
+Rules:
+
+- Keep components focused.
+- Separate UI state, data loading, and business rules.
+- Minimize server round trips.
+- Handle loading, empty, error, and permission states.
+- Do not expose sensitive data.
+- Escape and validate user-controlled values.
+- Follow accessibility basics for labels, keyboard use, and semantic markup.
+- Add Jest tests when behavior is meaningful or risky.
+
+When Apex is needed, verify CRUD/FLS/sharing enforcement on the server side.

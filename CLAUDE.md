@@ -53,8 +53,8 @@ receives explicit approval. Invoke the matching skill with `/`, e.g. `/salesforc
 | Lightning Web Components | `/lwc` |
 | Security, sharing, FLS, CRUD review | `/security-review` |
 
-Claude Code auto-discovers these under `.claude/skills/`; each is a thin pointer to the canonical
-workflow in `skills/<name>/SKILL.md` so there is a single source of truth.
+Claude Code auto-discovers these under `.claude/skills/`, which holds the canonical workflow for
+each skill. Other agents read the same files from that path; there is no second copy.
 
 Use `templates/` for approval plans, incident summaries, release records, and root-cause analyses.
 Use `checklists/` for pre-change, testing, production, review, and deployment gates. Record
@@ -63,10 +63,11 @@ reusable, sanitized lessons in `knowledge/engineering-memory/`.
 ## Structure
 
 - `docs/`: detailed rules and operating standards (read `docs/RULE_HIERARCHY.md` first)
-- `skills/`: canonical, focused reusable Salesforce workflows (source of truth)
-- `.claude/skills/`: Claude Code discovery layer pointing into `skills/`
+- `.claude/skills/`: canonical, focused reusable Salesforce workflows (source of truth,
+  auto-discovered by Claude Code)
 - `checklists/`: pre-change, testing, production, and release gates
 - `templates/`: approval, incident, manager, rollback, and RCA formats
+- `integrations/openai/`: skill adapters for non-Claude agents
 - `knowledge/engineering-memory/`: sanitized lessons and skill-improvement candidates
 - `org-snapshots/`: local, ignored, case-specific metadata snapshots
 - `logs/`: local, ignored working logs

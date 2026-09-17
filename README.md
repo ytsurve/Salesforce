@@ -7,7 +7,7 @@ This repository is a production-safe operating brain for Salesforce architecture
 1. `AGENTS.md` is the short, always-loaded contract.
 2. `CODEX.md` routes a task to the right standard and skill.
 3. `docs/` contains detailed, task-specific standards.
-4. `skills/` contains reusable workflows.
+4. `.claude/skills/` contains reusable workflows.
 5. `templates/` and `checklists/` turn standards into repeatable work.
 
 ## Operating Model
@@ -21,9 +21,10 @@ Keep approved source in the actual Salesforce project repository. Retrieve affec
 ## Structure
 
 - `docs/`: detailed rules and operating standards
-- `skills/`: focused reusable Salesforce workflows
+- `.claude/skills/`: focused reusable Salesforce workflows
 - `checklists/`: pre-change, testing, production, and release gates
 - `templates/`: approval, incident, manager, rollback, and RCA formats
+- `integrations/openai/`: skill adapters for non-Claude agents
 - `knowledge/engineering-memory/`: sanitized lessons and skill-improvement candidates
 - `org-snapshots/`: local, ignored, case-specific metadata snapshots
 

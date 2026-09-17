@@ -9,3 +9,12 @@ logs/*
 *.key
 *.pem
 *.auth
+
+# Claude Code local state: per-machine, never shared.
+.claude/settings.local.json
+.claude/worktrees/
+.claude/checkpoints/
+.claude/mailbox/
+.claude/agent-registry.json
+.claude/scheduled_tasks.json
+.claude/scheduled_tasks.lock

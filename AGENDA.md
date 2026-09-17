@@ -10,11 +10,11 @@
 
 ## Debugging
 
-Use `skills/salesforce-debugging/SKILL.md`. Capture the symptom, reproduce safely, establish the execution path, prove root cause, then propose the smallest fix.
+Use `.claude/skills/salesforce-debugging/SKILL.md`. Capture the symptom, reproduce safely, establish the execution path, prove root cause, then propose the smallest fix.
 
 ## Releases
 
-Use `skills/salesforce-release-management/SKILL.md`. A production release requires a validated deployment, rollback artifact, go/no-go approval, monitoring owner, and manager-ready release record.
+Use `.claude/skills/salesforce-release-management/SKILL.md`. A production release requires a validated deployment, rollback artifact, go/no-go approval, monitoring owner, and manager-ready release record.
 
 ## Continuous Improvement
 

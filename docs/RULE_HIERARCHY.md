@@ -7,7 +7,7 @@
 3. `AGENTS.md`
 4. This hierarchy
 5. Relevant standards in `docs/`
-6. Relevant skills in `skills/`
+6. Relevant skills in `.claude/skills/`
 7. Repository evidence and established patterns
 8. General best practices
 

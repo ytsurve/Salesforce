@@ -3,8 +3,23 @@ name: security-review
 description: Salesforce security review guidance. Use when reviewing CRUD, FLS, sharing, user mode, stripInaccessible, SOQL injection, XSS, secrets, Named Credentials, permissions, Experience Cloud exposure, or sensitive data handling.
 ---
 
-Canonical workflow: read [`skills/security-review/SKILL.md`](../../skills/security-review/SKILL.md)
-in full before acting.
+# Security Review
 
-This file exists only so Claude Code discovers the skill under `.claude/skills/`. Do not duplicate
-workflow content here — edit the canonical file instead (`docs/SKILL_EVOLUTION_STANDARD.md`).
+For an access or data-exposure incident, use `.claude/skills/salesforce-debugging/SKILL.md` to establish the affected user context and evidence before changing permissions or code. For any release, use `.claude/skills/salesforce-release-management/SKILL.md`.
+
+Treat security as a release gate.
+
+Check:
+
+- Sharing model and class sharing keywords
+- CRUD and FLS enforcement
+- User mode database operations where appropriate
+- `Security.stripInaccessible()`
+- SOQL injection
+- XSS and unsafe rendering
+- Named Credentials and secret handling
+- Permission Sets and Permission Set Groups
+- Guest user and Experience Cloud exposure
+- Sensitive fields and logging
+
+Do not approve a change that relies on hidden permissions, hardcoded secrets, broad object access, or unverified assumptions about user visibility.
