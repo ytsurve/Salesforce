@@ -4,7 +4,7 @@
 
 Use `.claude/skills/salesforce-release-management/SKILL.md`, `checklists/deployment.md`, and `templates/production-change-log.md`.
 
-Prepare one scoped release artifact from a known Git commit. Confirm dependencies, API version, target org, test level, deployment window, approver, monitoring owner, and rollback artifact. Validate before production; record the validation job/report and result.
+Prepare one scoped release artifact from a known Git commit. Confirm dependencies, API version, target org, test level, deployment window, approver, monitoring owner, and rollback artifact. Validate before production, but only after the user explicitly approves running the validation in that org. A validation is an org operation recorded under the user's name, not a local check. Record the validation job/report and result.
 
 ## Go/No-Go
 

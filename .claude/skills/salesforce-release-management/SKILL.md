@@ -12,7 +12,7 @@ Read `docs/DEPLOYMENT_STANDARD.md`, `docs/ROLLBACK_AND_EMERGENCY_STANDARD.md`, a
 1. Confirm target org, release window, approver, component scope, source commit, and dependencies.
 2. Prepare a validation plan and capture the pre-change metadata baseline.
 3. Prepare the reverse deployment artifact, data compensation approach, side-effect plan, rollback trigger, and named owners.
-4. Validate the exact release artifact. Report the result and request go/no-go approval.
+4. Ask for explicit approval to run the validation, naming the command and target org. Validation is an org operation: it leaves a Deployment Status entry under the user's name. Only after that yes, validate the exact release artifact. Report the result and request a separate go/no-go approval for the deployment.
 
 ## During And After Deployment
 

@@ -20,6 +20,11 @@ production-risk environment.
    tests, rollback, and approval needed.
 4. Stop for explicit approval before changing files, data, metadata, permissions, automation,
    integrations, or an org. Read-only inspection is allowed when scoped and safe.
+   Every org operation that changes or records anything needs its own explicit yes, in any org.
+   That includes **validate-only/check-only deployments**, quick deploys, test runs, assignments
+   and trace flags. Choosing a method ("apply via CLI") is not that yes. In production, run
+   nothing, not even read-only queries, unless the user's current message asks for it. CLI
+   operations run as the user, so they show in the org's audit trail under the user's name.
 5. After approval, make the smallest reversible change and verify it.
 6. Report the root cause, change, proof, risk, rollback status, and next monitoring step in plain
    language.
