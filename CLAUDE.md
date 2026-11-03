@@ -57,6 +57,7 @@ receives explicit approval. Invoke the matching skill with `/`, e.g. `/salesforc
 | Flow/automation | `/flow` |
 | Lightning Web Components | `/lwc` |
 | Security, sharing, FLS, CRUD review | `/security-review` |
+| Contact list (sheet/xlsx/csv) to Contact dataload file | `/contact-import-prep` |
 
 Claude Code auto-discovers these under `.claude/skills/`, which holds the canonical workflow for
 each skill. Other agents read the same files from that path; there is no second copy.
